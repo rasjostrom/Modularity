@@ -132,17 +132,13 @@ class Editor extends \Modularity\Options
      */
     public static function isPageForPostType($postId)
     {
-        $postTypes = get_post_types();
+        $postType = get_post_type($postId);
+        $option = get_option('page_for_' . $postType);
+        $pageContent = get_option('page_for_' . $postType . '_content');
 
-        foreach ($postTypes as $postType) {
-            $option = get_option('page_for_' . $postType);
-            $pageContent = get_option('page_for_' . $postType . '_content');
-
-            if ($option && $option === $postId && !$pageContent) {
-                return $postType;
-            }
+        if ($option && $option === $postId && !$pageContent) {
+            return $postType;
         }
-
         return false;
     }
 
@@ -223,7 +219,6 @@ class Editor extends \Modularity\Options
         $sidebars = null;
 
         $activeAreas = $this->getActiveAreas($template);
-
 
         // Add no active sidebars message if no active sidebars exists
         if (is_array($activeAreas) && count($activeAreas) === 0) {
@@ -380,7 +375,6 @@ class Editor extends \Modularity\Options
      */
     public static function getPostModules($postId)
     {
-
         //Declarations
         $modules = array();
         $retModules = array();
@@ -429,7 +423,7 @@ class Editor extends \Modularity\Options
             'post_status' => $postStatuses
         ));
 
-        //var_dump($modulesPosts);
+        //error_log(print_r($modulesPosts, true));
 
         // Add module id's as keys in the array
         if (!empty($modulesPosts)) {
