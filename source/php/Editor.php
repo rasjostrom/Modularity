@@ -421,8 +421,6 @@ class Editor extends \Modularity\Options
             'post_status' => $postStatuses
         ));
 
-        //error_log(print_r($modulesPosts, true));
-
         // Add module id's as keys in the array
         if (!empty($modulesPosts)) {
             foreach ($modulesPosts as $module) {
