@@ -220,6 +220,7 @@ class Editor extends \Modularity\Options
 
         $activeAreas = $this->getActiveAreas($template);
 
+
         // Add no active sidebars message if no active sidebars exists
         if (count($activeAreas) === 0) {
             add_meta_box(
