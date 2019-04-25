@@ -57,6 +57,9 @@ class App
 
     public function addCaps()
     {
+        // Allow deprecated unfiltered_html
+        add_filter('acf/allow_unfiltered_html', [$this, 'allowUnfilteredHtml']);
+
         $admin = get_role('administrator');
         if ($admin->has_cap('edit_module')) {
             return;
@@ -69,7 +72,8 @@ class App
                 'edit_other_modules',
                 'publish_modules',
                 'read_modules',
-                'delete_module'
+                'delete_module',
+                'unfiltered_html'
             ),
             'editor' => array(
                 'edit_module',
@@ -77,14 +81,16 @@ class App
                 'edit_other_modules',
                 'publish_modules',
                 'read_modules',
-                'delete_module'
+                'delete_module',
+                'unfiltered_html'
             ),
             'author' => array(
                 'edit_module',
                 'edit_modules',
                 'edit_other_modules',
                 'publish_modules',
-                'read_modules'
+                'read_modules',
+                'unfiltered_html'
             )
         );
 
@@ -95,6 +101,25 @@ class App
                 $role->add_cap($item);
             }
         }
+    }
+
+    /**
+     * Allows unfiltered_html on acf fields
+     * 
+     * @return bool
+     */
+    public function allowUnfilteredHtml() : bool
+    {
+        $user = wp_get_current_user();
+        $roles = ['administrator', 'editor', 'author'];
+        
+        foreach ($roles as $role) {
+            if (in_array($role, $user->roles)) {
+                return true;
+            }
+        }
+    
+        return false;
     }
 
     /**
